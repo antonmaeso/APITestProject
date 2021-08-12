@@ -1,12 +1,11 @@
 package testng;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import jsonmanagment.IObjectMapper;
 import org.json.JSONObject;
 import org.testng.annotations.*;
-import request.IRequest;
-import request.Request;
+import request.RequestBuilder;
+import jsonmanagment.ObjectMapping;
 
-import java.nio.file.Paths;
+import java.io.File;
 import java.util.List;
 
 import static org.testng.AssertJUnit.assertEquals;
@@ -18,20 +17,10 @@ public class BeforeTest {
     @org.testng.annotations.BeforeTest(alwaysRun = true)
     @Parameters({"requestData", "testVariables"})
     public void beforeTest(String requestData, @Optional String testVariables) {
-        List<IRequest> requests = mapRequests(requestData);
-        System.out.println(new JSONObject(testVariables));
+        ObjectMapping<RequestBuilder> objectMapper = new ObjectMapping<RequestBuilder>();
+        File file = objectMapper.withJsonFile(requestData);
+        List<RequestBuilder> requestBuilders =  objectMapper.objectMapper(file, RequestBuilder.class);
+
     }
-    private List<IRequest> mapRequests(String requestData) {
-        ObjectMapper mapper = new ObjectMapper();
-        if(!requestData.startsWith("\\")) {
-            requestData = "\\" + requestData.replace(".", "\\").replace("\\json", ".json");
-        }
-        try {
-            return mapper.readValue(Paths.get(Paths.get("").toAbsolutePath().toString() + requestData).toFile(), new TypeReference<List<Request>>() {
-            });
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return null;
-    }
+
 }
