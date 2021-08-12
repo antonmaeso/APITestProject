@@ -11,7 +11,7 @@ import java.util.List;
 
 public class BeforeTest {
 
-    JSONObject json = null;
+    private static IResponse response = null;
 
     @org.testng.annotations.BeforeTest(alwaysRun = true)
     @Parameters({"requestData", "testVariables"})
@@ -23,7 +23,10 @@ public class BeforeTest {
         for (RequestBuilder requestBuilder : requestBuilders) {
             response = new OKAPIExecutor(requestBuilder.build()).execute();
         }
-        System.out.println(response);
+        BeforeTest.response = response;
     }
 
+    public static IResponse getResponse() {
+        return response;
+    }
 }

@@ -22,13 +22,16 @@ public class ObjectMapping<T> {
     }
 
     public File withJsonFile(String dataLocation) {
-        return Paths.get(Paths.get("").toAbsolutePath() + formatPathToJsonFile(dataLocation)).toFile();
+        return Paths.get( formatPathToJsonFile(dataLocation)).toFile();
     }
 
     @NotNull
     private String formatPathToJsonFile(String dataLocation) {
-        String[] dataLocationList = dataLocation.split("\\.");
-        String lastItem = dataLocationList[dataLocationList.length-1];
-        return "\\" + dataLocation.replace(".", "\\").replace("\\"+lastItem, "." + lastItem);
+        if(!dataLocation.startsWith("C:")) {
+            String[] dataLocationList = dataLocation.split("\\.");
+            String lastItem = dataLocationList[dataLocationList.length - 1];
+            return  Paths.get("").toAbsolutePath()+ "\\" + dataLocation.replace(".", "\\").replace("\\" + lastItem, "." + lastItem);
+        }
+        return dataLocation;
     }
 }
