@@ -1,25 +1,14 @@
 package jsonmanagment;
 
-import com.google.common.jimfs.Configuration;
-import com.google.common.jimfs.Jimfs;
-import org.junit.Rule;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.junit.rules.TemporaryFolder;
-import request.Request;
 import request.RequestBuilder;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.FileSystem;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
-
-
-import static org.mockito.Mockito.mock;
 
 class ObjectMappingTest {
 

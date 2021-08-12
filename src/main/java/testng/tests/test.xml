@@ -5,6 +5,7 @@
         <parameter name="testVariables" value='{"test":"test"}'/>
         <classes>
             <class name="testng.BeforeTest"/>
+            <class name="testng.assertions.status.OK200"></class>
         </classes>
     </test>
 </suite>
