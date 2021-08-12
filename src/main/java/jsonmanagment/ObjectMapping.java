@@ -1,12 +1,10 @@
 package jsonmanagment;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.lang.reflect.ParameterizedType;
 import java.nio.file.Paths;
 import java.util.List;
 
