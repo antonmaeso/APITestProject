@@ -27,6 +27,8 @@ public class ObjectMapping<T> {
 
     @NotNull
     private String formatPathToJsonFile(String dataLocation) {
-        return "\\" + dataLocation.replace(".", "\\").replace("\\json", ".json");
+        String[] dataLocationList = dataLocation.split("\\.");
+        String lastItem = dataLocationList[dataLocationList.length-1];
+        return "\\" + dataLocation.replace(".", "\\").replace("\\"+lastItem, "." + lastItem);
     }
 }
