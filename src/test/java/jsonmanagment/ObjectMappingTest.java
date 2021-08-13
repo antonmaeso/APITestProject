@@ -3,6 +3,7 @@ package jsonmanagment;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import request.RequestBuilder;
+import request.RequestBuilders;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,15 +20,19 @@ class ObjectMappingTest {
     public void test(){
     File file = new File(anotherTempDir,"testfile.json");
     try {
-        Files.writeString(file.toPath(), "[\n" +
-                "  {\n" +
-                "    \"url\": \"https://postman-echo.com/post\",\n" +
-                "    \"method\": \"POST\",\n" +
-                "    \"body\": \"This is expected to be sent back as part of response body.\",\n" +
-                "    \"mediaType\": \"plain/text\",\n" +
-                "    \"headers\": {\"test\": \"name\"}\n" +
-                "}\n" +
-                "]");
+        Files.writeString(file.toPath(), "{\n" +
+                "  \"requestBuilders\": [\n" +
+                "    {\n" +
+                "      \"url\": \"https://postman-echo.com/post\",\n" +
+                "      \"method\": \"POST\",\n" +
+                "      \"body\": \"This is expected to be sent back as part of response body.\",\n" +
+                "      \"mediaType\": \"plain/text\",\n" +
+                "      \"headers\": {\n" +
+                "        \"test\": \"name\"\n" +
+                "      }\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}");
     } catch (IOException e) {
         e.printStackTrace();
     }
@@ -37,9 +42,9 @@ class ObjectMappingTest {
             .withMethod("POST")
             .withMediaType("plain/text")
             .withHeader("test", "name");
-        ObjectMapping<RequestBuilder> objectMapper = new ObjectMapping<>();
-    List<RequestBuilder> requestBuilders =  objectMapper.objectMapper(file, RequestBuilder.class);
-    assertEquals(requestBuilder.build(),requestBuilders.get(0).build());
+        ObjectMapping<RequestBuilders> objectMapper = new ObjectMapping<>();
+    RequestBuilders requestBuilders =  objectMapper.objectMapper(file, RequestBuilders.class);
+    assertEquals(requestBuilder.build(),requestBuilders.getRequestBuilders().get(0).build());
 
 }
 }

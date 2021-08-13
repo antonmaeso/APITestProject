@@ -1,9 +1,13 @@
-[
-  {
-    "url": "https://postman-echo.com/post",
-    "method": "POST",
-    "body": "This is expected to be sent back as part of response body.",
-    "mediaType": "plain/text",
-    "headers": {"test": "name"}
+{
+  "requestBuilders": [
+    {
+      "url": "https://postman-echo.com/post",
+      "method": "POST",
+      "body": "This is expected to be sent back as part of response body.",
+      "mediaType": "plain/text",
+      "headers": {
+        "test": "name"
+      }
+    }
+  ]
 }
-]

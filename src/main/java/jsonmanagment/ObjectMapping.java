@@ -6,13 +6,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.List;
 
 public class ObjectMapping<T> {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public List<T> objectMapper(File file, Class<T> contentClass) {
-        JavaType type = objectMapper.getTypeFactory().constructCollectionType(List.class, contentClass);
+    public T objectMapper(File file, Class<T> contentClass) {
+        JavaType type = objectMapper.getTypeFactory().constructType(contentClass);
         try {
             return objectMapper.readValue(file, type);
         } catch (Exception ex) {

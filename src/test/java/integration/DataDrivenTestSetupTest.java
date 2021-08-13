@@ -27,15 +27,19 @@ class DataDrivenTestSetupTest {
     public void getResponseBody() {
         File file = new File(anotherTempDir,"testfile.json");
         try {
-            Files.writeString(file.toPath(), "[\n" +
-                    "  {\n" +
-                    "    \"url\": \"https://postman-echo.com/post\",\n" +
-                    "    \"method\": \"POST\",\n" +
-                    "    \"body\": \"This is expected to be sent back as part of response body.\",\n" +
-                    "    \"mediaType\": \"plain/text\",\n" +
-                    "    \"headers\": {\"test\": \"name\"}\n" +
-                    "}\n" +
-                    "]");
+            Files.writeString(file.toPath(), "{\n" +
+                    "  \"requestBuilders\": [\n" +
+                    "    {\n" +
+                    "      \"url\": \"https://postman-echo.com/post\",\n" +
+                    "      \"method\": \"POST\",\n" +
+                    "      \"body\": \"This is expected to be sent back as part of response body.\",\n" +
+                    "      \"mediaType\": \"plain/text\",\n" +
+                    "      \"headers\": {\n" +
+                    "        \"test\": \"name\"\n" +
+                    "      }\n" +
+                    "    }\n" +
+                    "  ]\n" +
+                    "}");
         } catch (IOException e) {
             e.printStackTrace();
         }
