@@ -8,7 +8,7 @@ import testng.BeforeTest;
 
 public class InternalServerError500 {
 
-    @Test(groups = {"integration"})
+    @Test()
     public void givenServiceCall_whenBadRequestIsGenerated_then500ResponseCodeIsReturned() {
         // Given
         int responseStatus = BeforeTest.getResponse().getCode();

@@ -8,7 +8,8 @@ import request.RequestBuilders;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.List;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ObjectMappingTest {
@@ -42,9 +43,18 @@ class ObjectMappingTest {
             .withMethod("POST")
             .withMediaType("plain/text")
             .withHeader("test", "name");
-        ObjectMapping<RequestBuilders> objectMapper = new ObjectMapping<>();
-    RequestBuilders requestBuilders =  objectMapper.objectMapper(file, RequestBuilders.class);
+        ObjectMapping<RequestBuilders> objectMapper = new ObjectMapping<>(RequestBuilders.class);
+    RequestBuilders requestBuilders =  objectMapper.objectMapper(file);
     assertEquals(requestBuilder.build(),requestBuilders.getRequestBuilders().get(0).build());
 
 }
+
+    @Test
+    public void loadEnvironmentPropertiesJSON(){
+        ObjectMapping<Map> objectMapper = new ObjectMapping<>(Map.class);
+        File file = FilesManager.getFile("src/main/resources/environment/test_env.json");
+        Map envProperties =  objectMapper.objectMapper(file);
+
+        assertEquals(envProperties.get("hostname"), "test");
+    }
 }

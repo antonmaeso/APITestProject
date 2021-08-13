@@ -8,7 +8,7 @@ import testng.BeforeTest;
 
 public class BadRequest400 {
 
-    @Test(groups = {"integration"})
+    @Test()
     public void givenServiceCall_whenBadRequestIsGenerated_then400ResponseCodeIsReturned() {
         // Given
         int responseStatus = BeforeTest.getResponse().getCode();

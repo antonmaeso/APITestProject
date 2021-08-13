@@ -9,7 +9,7 @@ import testng.BeforeTest;
 public class OK200 {
 
 
-    @Test(groups = {"integration"})
+    @Test()
     public void givenAService_whenCallServiceWithValidData_then200ResponseCodeIsReceived() {
         // Given
         int responseStatus = BeforeTest.getResponse().getCode();

@@ -8,7 +8,7 @@ import testng.BeforeTest;
 
 public class Unauthorized401 {
 
-    @Test(groups = {"integration"})
+    @Test()
     public void givenAServiceIsCalled_whenCallServiceCallIsMissingAuthorisationData_then401ResponseCodeIsReceived() {
         // Given
         int responseStatus = BeforeTest.getResponse().getCode();
