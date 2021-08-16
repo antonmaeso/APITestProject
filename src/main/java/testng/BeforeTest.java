@@ -18,6 +18,10 @@ public class BeforeTest {
         BeforeTest.response = makeRequests(requestBuilders);
     }
 
+    public static IResponse getResponse() {
+        return response;
+    }
+
     private RequestBuilders mapRequestDataToBuilders(String requestDataFileLocation) {
         return new ObjectMapping<>(RequestBuilders.class).objectMapper(FilesManager.getFile(requestDataFileLocation));
     }
@@ -30,7 +34,4 @@ public class BeforeTest {
         return response;
     }
 
-    public static IResponse getResponse() {
-        return response;
-    }
 }
