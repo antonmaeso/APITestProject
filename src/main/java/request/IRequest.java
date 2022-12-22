@@ -6,7 +6,9 @@ import java.util.Map;
 public interface IRequest {
     IMediaType getMediaType();
 
-    String getBody();
+    Map<String,Object> getBody();
+
+    String getStringBody();
 
     String getUrl();
 

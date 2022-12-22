@@ -1,8 +1,10 @@
 package request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class RequestBuilder {
     @JsonProperty("url")
@@ -10,7 +12,9 @@ public class RequestBuilder {
     @JsonProperty("method")
     private String method;
     @JsonProperty("body")
-    private String body;
+    private Map<String,Object> body;
+    @JsonProperty("string_body")
+    private String stringBody;
     @JsonProperty("mediaType")
     private String mediaType;
     @JsonProperty("headers")
@@ -28,10 +32,17 @@ public class RequestBuilder {
         return this;
     }
     @JsonProperty("body")
-    public RequestBuilder withBody(String body) {
+    public RequestBuilder withBody(Map<String,Object> body) {
         this.body = body;
         return this;
     }
+
+    @JsonProperty("string_body")
+    public RequestBuilder withBody(String stringBody) {
+        this.stringBody = stringBody;
+        return this;
+    }
+
     @JsonProperty("media")
     public RequestBuilder withMediaType(String mediaType) {
         this.mediaType = mediaType;
@@ -49,6 +60,6 @@ public class RequestBuilder {
         return this;
     }
     public Request build() {
-        return new Request(url,method, body, mediaType, headers);
+        return new Request(url,method, body, stringBody, mediaType, headers);
     }
 }

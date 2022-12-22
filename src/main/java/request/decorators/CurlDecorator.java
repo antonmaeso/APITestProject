@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import static mediatype.HttpMediaType.X_WWW_FORM_URLENCODED;
+
 public class CurlDecorator extends RequestDecorator{
     private String curl;
     public CurlDecorator(Request request) {
@@ -19,18 +21,22 @@ public class CurlDecorator extends RequestDecorator{
     }
 
     @Override
-    public String getBody() {
-        String body = "";
-        if(request.getMediaType().value().equals("application/x-www-form-urlencoded")){
-            String[] params = request.getBody().split("&");
+    public String getStringBody() {
+        StringBuilder body = new StringBuilder();
+        if(request.getMediaType().value().equals(X_WWW_FORM_URLENCODED.getMediaType())){
+            String[] params = request.getStringBody().split("&");
             for (String s : params) {
-                body += "--data-urlencode '" + s + "' \\\n";
+                body.append("--data-urlencode '").append(s).append("' \\\n");
             }
         } else {
-            body = "--data-raw '" + request.getBody() + "'";
+            body = new StringBuilder("--data-raw '" + request.getStringBody() + "'");
         }
+        return body.toString();
+    }
 
-        return body;
+    @Override
+    public Map<String, Object> getBody() {
+        return null;
     }
 
     @Override
@@ -64,7 +70,7 @@ public class CurlDecorator extends RequestDecorator{
             curl = "curl --location --request " + getMethod() + " '" + request.getUrl() + "'\\\n" +
                     "--header 'Content-Type: " + getMediaType().value() + "'" + "\\\n" +
                     headers +
-                    getBody();
+                    getStringBody();
         }
        return curl;
     }

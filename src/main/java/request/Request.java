@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public record Request(String url, String method, String body, String mediaType,
+public record Request(String url, String method, Map<String,Object> body, String stringBody, String mediaType,
                       HashMap<String, String> headers) implements IRequest {
 
     public String getUrl() {
@@ -23,8 +23,12 @@ public record Request(String url, String method, String body, String mediaType,
         return this.headers;
     }
 
-    public String getBody() {
+    public Map<String, Object> getBody() {
         return this.body;
+    }
+
+    public String getStringBody(){
+        return this.stringBody;
     }
 
     public IMediaType getMediaType() {
@@ -39,6 +43,7 @@ public record Request(String url, String method, String body, String mediaType,
         return Objects.equals(this.url, that.url) &&
                 Objects.equals(this.method, that.method) &&
                 Objects.equals(this.body, that.body) &&
+                Objects.equals(this.stringBody, that.stringBody) &&
                 Objects.equals(this.mediaType, that.mediaType) &&
                 Objects.equals(this.headers, that.headers);
     }
@@ -50,10 +55,17 @@ public record Request(String url, String method, String body, String mediaType,
 
     @Override
     public String toString() {
+        String bodyUsed = null;
+        if(body != null){
+            bodyUsed = body.toString();
+        }
+        if (stringBody != null){
+            bodyUsed = stringBody;
+        }
         return "Request[" +
                 "url=" + url + ", " +
                 "method=" + method + ", " +
-                "body=" + body + ", " +
+                "body=" + bodyUsed + ", " +
                 "mediaType=" + mediaType + ", " +
                 "headers=" + headers + ']';
     }

@@ -3,8 +3,8 @@ package request.decorators;
 import org.junit.jupiter.api.Test;
 import request.IRequest;
 import request.RequestBuilder;
-import request.decorators.validation.ValidateRequestDecorator;
 
+import static mediatype.HttpMediaType.X_WWW_FORM_URLENCODED;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CurlDecoratorTest {
@@ -31,11 +31,11 @@ class CurlDecoratorTest {
                 .withMediaType("application/x-www-form-urlencoded")
                 .withBody("foo1=bar1&foo2=bar2")
                 .build());
-        assertEquals("application/x-www-form-urlencoded", request.getMediaType().value());
+        assertEquals(X_WWW_FORM_URLENCODED.getMediaType(), request.getMediaType().value());
             assertEquals("""
                 --data-urlencode 'foo1=bar1' \\
                 --data-urlencode 'foo2=bar2' \\
-                """, request.getBody());
+                """, request.getStringBody());
 
 
     }
@@ -65,7 +65,7 @@ class CurlDecoratorTest {
                 .withMediaType("text/plain")
                 .build());
 
-            assertEquals("--data-raw 'This is expected to be sent back as part of response body.'", request.getBody());
+            assertEquals("--data-raw 'This is expected to be sent back as part of response body.'", request.getStringBody());
 
     }
 

@@ -55,7 +55,7 @@ public class RequestTest {
                 .withMethod("POST")
                 .withBody("foo1=bar1&foo2=bar2")
                 .build();
-        assertEquals("foo1=bar1&foo2=bar2", request.getBody());
+        assertEquals("foo1=bar1&foo2=bar2", request.getStringBody());
     }
 
     @Test
@@ -66,7 +66,7 @@ public class RequestTest {
                 .withBody("foo1=bar1&foo2=bar2")
                 .withMediaType("text/plain")
                 .build();
-        assertEquals("foo1=bar1&foo2=bar2", request.getBody());
+        assertEquals("foo1=bar1&foo2=bar2", request.getStringBody());
     }
 
 }

@@ -27,7 +27,7 @@ class ValidateRequestDecoratorTest {
     void onlyBodyNoMediaType(){
         Request request = new RequestBuilder()
                 .withUrl("https://postman-echo.com/get?foo1=bar1&foo2=bar2")
-                .withBody("fdsfds")
+//                .withBody("fdsfds")
                 .withMethod("GET")
                 .build();
 //        assertThrows(ValidateRequestDecorator.RequestValidationException.class,() ->{

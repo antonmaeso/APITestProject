@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Suite1" verbose="1" >
+    <test name="Regression1">
+        <parameter name="requestDataFileLocation" value="src.main.resources.data.filemangement.file_management.json"/>
+        <classes>
+            <class name="testng.BeforeTest"/>
+            <class name="testng.assertions.status.OK200"/>
+        </classes>
+    </test>
+</suite>

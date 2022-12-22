@@ -22,13 +22,18 @@ public class ValidateRequestDecorator extends RequestDecorator {
     }
 
     @Override
-    public String getBody() {
+    public Map<String, Object> getBody() {
         try {
             mustBeBothMediaTypeAndBodyOrNeither();
         } catch (RequestValidationException e) {
             e.printStackTrace();
         }
         return request.getBody();
+    }
+
+    @Override
+    public String getStringBody() {
+        return null;
     }
 
     @Override
@@ -47,7 +52,7 @@ public class ValidateRequestDecorator extends RequestDecorator {
     }
 
     private void mustBeBothMediaTypeAndBodyOrNeither() throws RequestValidationException {
-        if (isBothOrNeitherNull(request.getMediaType().value(), request.getBody())){
+        if (isBothOrNeitherNull(request.getMediaType().value(), request.getBody().toString())){
             throw new RequestValidationException("A request must have both a body and a media type or neither body= "
                     + request.getBody() +
                     " media type= " +

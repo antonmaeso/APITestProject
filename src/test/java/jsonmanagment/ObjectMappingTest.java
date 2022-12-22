@@ -26,7 +26,7 @@ class ObjectMappingTest {
                 "    {\n" +
                 "      \"url\": \"https://postman-echo.com/post\",\n" +
                 "      \"method\": \"POST\",\n" +
-                "      \"body\": \"This is expected to be sent back as part of response body.\",\n" +
+                "      \"string_body\": \"This is expected to be sent back as part of response body.\",\n" +
                 "      \"mediaType\": \"plain/text\",\n" +
                 "      \"headers\": {\n" +
                 "        \"test\": \"name\"\n" +

@@ -1,5 +1,6 @@
 package jsonmanagment;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -16,6 +17,7 @@ public class ObjectMapping<T> {
     }
 
     public T objectMapper(File file) {
+        objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
         JavaType type = objectMapper.getTypeFactory().constructType(contentClass);
         try {
             return objectMapper.readValue(file, type);
