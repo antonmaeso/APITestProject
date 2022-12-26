@@ -49,28 +49,30 @@ public class BeforeTest {
             String request = requests.getJSONObject(i).toString();
             Request requestBuilder = new ObjectMapping<>(RequestBuilder.class).stringToObjectMapper(request).build();
             response = new OKAPIExecutor(requestBuilder).execute();
-            requests = extractvariableFromNextRequest(response, requests, i);
+            requests = extractVariableFromNextRequest(response, requests, i);
         }
         return response;
     }
 
-    private JSONArray extractvariableFromNextRequest(IResponse response, JSONArray requests, int i) {
+    private JSONArray extractVariableFromNextRequest(IResponse response, JSONArray requests, int i) {
         if (i != requests.length() - 1 && response != null) {
             String request = requests.getJSONObject(i+1).toString();
             List<String> variables = getVariables(request);
             for (String var: variables) {
-                request = new JSONObject(response.getBody()).get(var.substring(1, var.length()-1)).toString();
+                request = new JSONObject(response.getBody()).get(var).toString();
                 testVariables.put(var, request);
-
             }
-            String stringRequests = null;
-            for (Map.Entry<String, String> entry : testVariables.entrySet()) {
-                stringRequests = requests.toString().replace(entry.getKey(), entry.getValue());
-            }
-            return new JSONArray(stringRequests);
-
+            requests = getReplaceVariableInNextRequest(requests);
         }
         return requests;
+    }
+
+    private JSONArray getReplaceVariableInNextRequest(JSONArray requests) {
+        String stringRequests = requests.toString();
+        for (Map.Entry<String, String> entry : testVariables.entrySet()) {
+            stringRequests = stringRequests.replace("#" + entry.getKey() + "#", entry.getValue());
+        }
+        return new JSONArray(stringRequests);
     }
 
     private List<String> getVariables(String jsonString) {
@@ -79,7 +81,7 @@ public class BeforeTest {
 
         List<String> key = new ArrayList<>();
         if (matcher.find()) {
-            key.add(matcher.group(0));
+            key.add(matcher.group(0).substring(1, matcher.group(0).length()-1));
         }
         return key;
     }
