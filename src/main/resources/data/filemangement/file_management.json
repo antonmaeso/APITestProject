@@ -25,6 +25,22 @@
         "Host": "languageosfileapis-staging-ng.unbabel.net",
         "Authorization": "Bearer #access_token#"
       }
+    },
+  {
+    "url": "https://languageosfileapis-staging-ng.unbabel.net/v1/customers/#customer_id#/files",
+    "method": "POST",
+    "body": {
+      "filename": "testFile.txt",
+      "extension":"txt",
+      "language":"EN",
+      "type":"source",
+      "customer_id": "#customer_id#"
+    },
+    "mediaType": "application/json",
+    "headers": {
+      "Host": "languageosfileapis-staging-ng.unbabel.net",
+      "Authorization": "Bearer #access_token#"
     }
+  }
 
 ]

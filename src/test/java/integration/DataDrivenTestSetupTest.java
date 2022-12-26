@@ -1,5 +1,6 @@
 package integration;
 
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import request.Request;

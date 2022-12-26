@@ -2,6 +2,7 @@
 <suite name="Suite1" verbose="1" >
     <test name="Regression1">
         <parameter name="requestDataFileLocation" value="src.main.resources.data.filemangement.file_management.json"/>
+        <parameter name="testVariables" value='{"customer_id":"anton"}'/>
         <classes>
             <class name="testng.BeforeTest"/>
             <class name="testng.assertions.status.OK200"/>
