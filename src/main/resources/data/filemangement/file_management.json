@@ -1,5 +1,4 @@
-{
-  "requestBuilders": [
+[
     {
       "url": "https://staging.iam.unbabel.com/auth/realms/staging/protocol/openid-connect/token",
       "method": "POST",
@@ -11,6 +10,21 @@
         "Content-Type": "application/x-www-form-urlencoded",
         "Authorization": "Basic c2EtZmlsZS1wcm9jZXNzaW5nLWFwcDp1MGRqVGRvMXNuQkJHaDFNcnl4QXk0cHlZSHhSUlVmVA=="
       }
+    },
+    {
+      "url": "https://languageosfileapis-staging-ng.unbabel.net/v1/customers/anton/configs:discover",
+      "method": "POST",
+      "body": {
+        "work_file_format": "xlf_1_2",
+        "source_file_name": "source.txt",
+        "source_language": "en-GB",
+        "target_language": "pt-PT"
+      },
+      "mediaType": "application/json",
+      "headers": {
+        "Host": "languageosfileapis-staging-ng.unbabel.net",
+        "Authorization": "Bearer #access_token#"
+      }
     }
-  ]
-}
+
+]

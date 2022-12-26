@@ -1,10 +1,13 @@
 package jsonmanagment;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import request.RequestBuilder;
 
 import java.io.File;
+import java.lang.reflect.Type;
 
 
 public class ObjectMapping<T> {
@@ -14,6 +17,14 @@ public class ObjectMapping<T> {
     public ObjectMapping(Class<T> contentClass) {
        this.contentClass = contentClass;
 
+    }
+
+    public T stringToObjectMapper(String stringJson){
+        try {
+            return objectMapper.readValue(stringJson, contentClass);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public T objectMapper(File file) {

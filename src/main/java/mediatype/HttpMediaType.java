@@ -1,5 +1,7 @@
 package mediatype;
 
+import java.util.Arrays;
+
 public enum HttpMediaType {
     APPLICATION_JSON("application/json"),
     APPLICATION_XML("application/xml"),
@@ -17,5 +19,12 @@ public enum HttpMediaType {
 
     public String getMediaType() {
         return mediaType;
+    }
+
+    public static boolean isJsonBody(String mediaType)
+    {
+        return Arrays.asList(
+                        APPLICATION_JSON.getMediaType()
+        ).contains(mediaType);
     }
 }
