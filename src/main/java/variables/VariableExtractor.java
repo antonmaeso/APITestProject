@@ -5,7 +5,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import response.IResponse;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -25,7 +24,22 @@ public class VariableExtractor {
     public static void setTestVariables(Map<String, String> testVariables) {
         VariableExtractor.testVariables.putAll(testVariables);
     }
-    public JSONArray mapValueFromResponseToRequest(IResponse response, JSONArray requests, int i) {
+
+    public void loadEnvironmentVariables(){
+        Map<String, String> testLevelVariablesMap = new HashMap<>();
+        JSONObject testLevelVariablesJSON = null;
+        try {
+            testLevelVariablesJSON = new JSONObject(new String(Files.readAllBytes(FilesManager.getFile(environment).toPath())));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        for (String key : testLevelVariablesJSON.keySet()) {
+            testLevelVariablesMap.put(key, testLevelVariablesJSON.getString(key));
+        }
+        VariableExtractor.setTestVariables(testLevelVariablesMap);
+    }
+
+    public JSONArray mapValueFromResponseToRequestVariables(IResponse response, JSONArray requests, int i) {
         if (i != requests.length() - 1 && response != null) {
             String request = requests.getJSONObject(i+1).toString();
             List<String> variables = getVariables(request);
@@ -39,8 +53,9 @@ public class VariableExtractor {
         return requests;
     }
 
-    public void mapTestLevelVariables(String testVariables, Map<String, String> testLevelVariablesMap) {
+    public void mapTestLevelVariables(String testVariables) {
         JSONObject testLevelVariablesJSON = new JSONObject(testVariables);
+        Map<String, String> testLevelVariablesMap = new HashMap<>();
         for (String key : testLevelVariablesJSON.keySet()) {
             testLevelVariablesMap.put(key, testLevelVariablesJSON.getString(key));
         }
@@ -71,20 +86,5 @@ public class VariableExtractor {
         }
         return new JSONArray(sb.toString());
     }
-
-    public void loadEnvironmentVariables(){
-        Map<String, String> testLevelVariablesMap = new HashMap<>();
-        JSONObject testLevelVariablesJSON = null;
-        try {
-            testLevelVariablesJSON = new JSONObject(new String(Files.readAllBytes(FilesManager.getFile(environment).toPath())));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        for (String key : testLevelVariablesJSON.keySet()) {
-            testLevelVariablesMap.put(key, testLevelVariablesJSON.getString(key));
-        }
-        VariableExtractor.setTestVariables(testLevelVariablesMap);
-    }
-
 
 }

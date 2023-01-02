@@ -38,8 +38,7 @@ public class BeforeTest {
     @Parameters({"requestDataFileLocation", "testVariables"})
     public void beforeTest(String requestDataFileLocation, @Optional String testVariables) {
         variableExtractor.loadEnvironmentVariables();
-        Map<String, String> testLevelVariablesMap = new HashMap<>();
-        variableExtractor.mapTestLevelVariables(testVariables, testLevelVariablesMap);
+        variableExtractor.mapTestLevelVariables(testVariables);
         JSONArray requests = mapRequestDataToBuilders(requestDataFileLocation);
         BeforeTest.response = makeRequests(requests);
     }
@@ -66,7 +65,7 @@ public class BeforeTest {
                 log.info("Request: " + i + " " + stringRequest);
                 Request requestBuilder = new ObjectMapping<>(RequestBuilder.class).stringToObjectMapper(stringRequest).build();
                 response = new OKAPIExecutor(requestBuilder).execute();
-                requests = variableExtractor.mapValueFromResponseToRequest(response, requests, i);
+                requests = variableExtractor.mapValueFromResponseToRequestVariables(response, requests, i);
             }
         }
         return response;
