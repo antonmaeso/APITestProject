@@ -1,6 +1,6 @@
 package client;
 
-import interceptor.InterceptorModifyRequest;
+import interceptor.InterceptorRequestLogging;
 import okhttp3.OkHttpClient;
 import request.IRequest;
 //feel like this should exist
@@ -9,7 +9,7 @@ public class Client implements IClient{
     public OkHttpClient getClient(){
         return new OkHttpClient()
                 .newBuilder()
-                .addInterceptor(new InterceptorModifyRequest())
+                .addInterceptor(new InterceptorRequestLogging())
                 .build();
     }
 

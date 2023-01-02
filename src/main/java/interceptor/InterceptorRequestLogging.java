@@ -7,8 +7,8 @@ import org.apache.log4j.Logger;
 
 import java.io.IOException;
 
-public class InterceptorModifyRequest implements Interceptor{
-    private static final Logger log = Logger.getLogger(InterceptorModifyRequest.class);
+public class InterceptorRequestLogging implements Interceptor{
+    private static final Logger log = Logger.getLogger(InterceptorRequestLogging.class);
 
     @Override
     public Response intercept(Chain chain) throws IOException {
