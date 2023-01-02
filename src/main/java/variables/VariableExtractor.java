@@ -13,16 +13,13 @@ import java.util.regex.Pattern;
 
 public class VariableExtractor {
 
-    public static Map<String,String> testVariables = new HashMap<>();
+    private static final Map<String,String> testVariables = new HashMap<>();
 
-    public static Map<String, String> getTestVariables() {
-        return testVariables;
-    }
 
     public static void setTestVariables(Map<String, String> testVariables) {
         VariableExtractor.testVariables.putAll(testVariables);
     }
-    public JSONArray extractVariableFromNextRequest(IResponse response, JSONArray requests, int i) {
+    public JSONArray mapValueFromResponseToRequest(IResponse response, JSONArray requests, int i) {
         if (i != requests.length() - 1 && response != null) {
             String request = requests.getJSONObject(i+1).toString();
             List<String> variables = getVariables(request);

@@ -15,12 +15,8 @@ import variables.VariableExtractor;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 public class BeforeTest {
@@ -69,7 +65,7 @@ public class BeforeTest {
                 log.info("Request: " + i + " " + stringRequest);
                 Request requestBuilder = new ObjectMapping<>(RequestBuilder.class).stringToObjectMapper(stringRequest).build();
                 response = new OKAPIExecutor(requestBuilder).execute();
-                requests = variableExtractor.extractVariableFromNextRequest(response, requests, i);
+                requests = variableExtractor.mapValueFromResponseToRequest(response, requests, i);
             }
         }
         return response;
