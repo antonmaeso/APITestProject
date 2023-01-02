@@ -1,9 +1,9 @@
 package testng;
-import client.Client;
 import jsonmanagment.FilesManager;
-import okhttp3.OkHttpClient;
 import okwrapper.OKAPIExecutor;
 import okwrapper.OKAPIListener;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.testng.annotations.*;
@@ -23,6 +23,11 @@ import java.util.regex.Pattern;
 
 
 public class BeforeTest {
+    static {
+        PropertyConfigurator.configure("src/main/resources/config/log4j.properties");
+    }
+
+    private static final Logger log = Logger.getLogger(BeforeTest.class);
 
     private static IResponse response = null;
     public static Map<String,String> testVariables = new HashMap<>();
@@ -31,13 +36,17 @@ public class BeforeTest {
     @Parameters({"requestDataFileLocation", "testVariables"})
     public void beforeTest(String requestDataFileLocation, @Optional String testVariables) {
         Map<String, String> testLevelVariablesMap = new HashMap<>();
+        mapTestLevelVariables(testVariables, testLevelVariablesMap);
+        BeforeTest.testVariables.putAll(testLevelVariablesMap);
+        JSONArray requests = mapRequestDataToBuilders(requestDataFileLocation);
+        BeforeTest.response = makeRequests(requests);
+    }
+
+    private void mapTestLevelVariables(String testVariables, Map<String, String> testLevelVariablesMap) {
         JSONObject testLevelVariablesJSON = new JSONObject(testVariables);
         for (String key : testLevelVariablesJSON.keySet()) {
             testLevelVariablesMap.put(key, testLevelVariablesJSON.getString(key));
         }
-        BeforeTest.testVariables.putAll(testLevelVariablesMap);
-        JSONArray requests = mapRequestDataToBuilders(requestDataFileLocation);
-        BeforeTest.response = makeRequests(requests);
     }
 
     public static IResponse getResponse() {
@@ -46,8 +55,10 @@ public class BeforeTest {
 
     private JSONArray mapRequestDataToBuilders(String requestDataFileLocation) {
         try {
+            log.info("request Data File Location " + requestDataFileLocation);
             return new JSONArray(new String(Files.readAllBytes(FilesManager.getFile(requestDataFileLocation).toPath())));
         } catch (IOException e) {
+            log.debug(e);
             throw new RuntimeException(e);
         }
     }
@@ -57,19 +68,26 @@ public class BeforeTest {
         for (int i = 0; i < requests.length(); i++) {
             JSONObject request = requests.getJSONObject(i);
             if(request.get("method").equals("CALLBACK")){
-                try {
-                    new OKAPIListener().createNewListener();
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+                spinUpServerForCallBackThenDestroy();
             } else {
                 String stringRequest = String.valueOf(request);
+                log.info("Request: " + i + " " + stringRequest);
                 Request requestBuilder = new ObjectMapping<>(RequestBuilder.class).stringToObjectMapper(stringRequest).build();
+                log.info("variables " + testVariables);
                 response = new OKAPIExecutor(requestBuilder).execute();
                 requests = extractVariableFromNextRequest(response, requests, i);
             }
         }
         return response;
+    }
+
+    private void spinUpServerForCallBackThenDestroy() {
+        try {
+            new OKAPIListener().createNewListener();
+        } catch (Exception e) {
+            log.debug(e);
+            throw new RuntimeException(e);
+        }
     }
 
     private JSONArray extractVariableFromNextRequest(IResponse response, JSONArray requests, int i) {
@@ -87,24 +105,27 @@ public class BeforeTest {
     }
 
     private JSONArray getReplaceVariableInNextRequest(JSONArray requests) {
-        String stringRequests = requests.toString();
+        StringBuilder sb = new StringBuilder(requests.toString());
         for (Map.Entry<String, String> entry : testVariables.entrySet()) {
-            stringRequests = stringRequests.replace("#" + entry.getKey() + "#", entry.getValue());
+            int startIndex = sb.indexOf("#" + entry.getKey() + "#");
+            while (startIndex != -1) {
+                sb.replace(startIndex, startIndex + entry.getKey().length() + 2, entry.getValue());
+                startIndex = sb.indexOf("#" + entry.getKey() + "#");
+            }
         }
-        return new JSONArray(stringRequests);
+        return new JSONArray(sb.toString());
     }
 
     private List<String> getVariables(String jsonString) {
         Pattern pattern = Pattern.compile("#.*#");
         Matcher matcher = pattern.matcher(jsonString);
 
-        List<String> key = new ArrayList<>();
-        if (matcher.find()) {
-            String keyString = matcher.group(0).substring(1, matcher.group(0).length() - 1);
-            key.add(keyString);
-
+        List<String> variables = new ArrayList<>();
+        while (matcher.find()) {
+            String variable = matcher.group(0).substring(1, matcher.group(0).length() - 1);
+            variables.add(variable);
         }
-        return key;
+        return variables;
     }
 
 }

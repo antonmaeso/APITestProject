@@ -1,7 +1,6 @@
 package okwrapper;
 
 import client.Client;
-import interceptor.InterceptorModifyRequest;
 import mediatype.HttpMediaType;
 import okhttp3.*;
 import org.jetbrains.annotations.Nullable;
