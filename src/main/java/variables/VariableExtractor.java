@@ -1,9 +1,13 @@
 package variables;
 
+import jsonmanagment.FilesManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import response.IResponse;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +18,8 @@ import java.util.regex.Pattern;
 public class VariableExtractor {
 
     private static final Map<String,String> testVariables = new HashMap<>();
+
+    private String environment = "src/main/resources/environment/env.json";
 
 
     public static void setTestVariables(Map<String, String> testVariables) {
@@ -31,6 +37,15 @@ public class VariableExtractor {
             requests = getReplaceVariableInNextRequest(requests);
         }
         return requests;
+    }
+
+    public void mapTestLevelVariables(String testVariables, Map<String, String> testLevelVariablesMap) {
+        JSONObject testLevelVariablesJSON = new JSONObject(testVariables);
+        for (String key : testLevelVariablesJSON.keySet()) {
+            testLevelVariablesMap.put(key, testLevelVariablesJSON.getString(key));
+        }
+        VariableExtractor.setTestVariables(testLevelVariablesMap);
+
     }
 
     private List<String> getVariables(String jsonString) {
@@ -57,13 +72,19 @@ public class VariableExtractor {
         return new JSONArray(sb.toString());
     }
 
-    public void mapTestLevelVariables(String testVariables, Map<String, String> testLevelVariablesMap) {
-        JSONObject testLevelVariablesJSON = new JSONObject(testVariables);
+    public void loadEnvironmentVariables(){
+        Map<String, String> testLevelVariablesMap = new HashMap<>();
+        JSONObject testLevelVariablesJSON = null;
+        try {
+            testLevelVariablesJSON = new JSONObject(new String(Files.readAllBytes(FilesManager.getFile(environment).toPath())));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         for (String key : testLevelVariablesJSON.keySet()) {
             testLevelVariablesMap.put(key, testLevelVariablesJSON.getString(key));
         }
         VariableExtractor.setTestVariables(testLevelVariablesMap);
-
     }
+
 
 }

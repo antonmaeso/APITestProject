@@ -29,7 +29,7 @@ public class OKAPIListener {
         server.start();
 
         // Wait for the server to stop
-        // server.join();
+        server.join();
 
     }
 

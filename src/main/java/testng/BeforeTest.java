@@ -37,6 +37,7 @@ public class BeforeTest {
     @org.testng.annotations.BeforeTest(alwaysRun = true)
     @Parameters({"requestDataFileLocation", "testVariables"})
     public void beforeTest(String requestDataFileLocation, @Optional String testVariables) {
+        variableExtractor.loadEnvironmentVariables();
         Map<String, String> testLevelVariablesMap = new HashMap<>();
         variableExtractor.mapTestLevelVariables(testVariables, testLevelVariablesMap);
         JSONArray requests = mapRequestDataToBuilders(requestDataFileLocation);
