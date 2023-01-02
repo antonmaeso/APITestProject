@@ -1,7 +1,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="Suite1" verbose="1" >
     <test name="Regression1">
-        <parameter name="requestDataFileLocation" value="src.main.resources.data.filemangement.file_management.json"/>
+        <parameter name="requestDataFileLocation" value="src.main.resources.data.filemangement.post_processing.json"/>
         <parameter name="testVariables" value='{"customer_id":"anton"}'/>
         <classes>
             <class name="testng.BeforeTest"/>

@@ -1,6 +1,9 @@
 package testng;
+import client.Client;
 import jsonmanagment.FilesManager;
+import okhttp3.OkHttpClient;
 import okwrapper.OKAPIExecutor;
+import okwrapper.OKAPIListener;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.testng.annotations.*;
@@ -52,10 +55,19 @@ public class BeforeTest {
     private IResponse makeRequests(JSONArray requests) {
         IResponse response = null;
         for (int i = 0; i < requests.length(); i++) {
-            String request = requests.getJSONObject(i).toString();
-            Request requestBuilder = new ObjectMapping<>(RequestBuilder.class).stringToObjectMapper(request).build();
-            response = new OKAPIExecutor(requestBuilder).execute();
-            requests = extractVariableFromNextRequest(response, requests, i);
+            JSONObject request = requests.getJSONObject(i);
+            if(request.get("method").equals("CALLBACK")){
+                try {
+                    new OKAPIListener().createNewListener();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                String stringRequest = String.valueOf(request);
+                Request requestBuilder = new ObjectMapping<>(RequestBuilder.class).stringToObjectMapper(stringRequest).build();
+                response = new OKAPIExecutor(requestBuilder).execute();
+                requests = extractVariableFromNextRequest(response, requests, i);
+            }
         }
         return response;
     }
@@ -65,7 +77,8 @@ public class BeforeTest {
             String request = requests.getJSONObject(i+1).toString();
             List<String> variables = getVariables(request);
             for (String var: variables) {
-                request = new JSONObject(response.getBody()).get(var).toString();
+                String varOriginal = var.split(" ")[0];
+                request = new JSONObject(response.getBody()).get(varOriginal).toString();
                 testVariables.put(var, request);
             }
             requests = getReplaceVariableInNextRequest(requests);
@@ -87,7 +100,9 @@ public class BeforeTest {
 
         List<String> key = new ArrayList<>();
         if (matcher.find()) {
-            key.add(matcher.group(0).substring(1, matcher.group(0).length()-1));
+            String keyString = matcher.group(0).substring(1, matcher.group(0).length() - 1);
+            key.add(keyString);
+
         }
         return key;
     }

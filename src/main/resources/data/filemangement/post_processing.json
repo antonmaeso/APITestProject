@@ -1,0 +1,43 @@
+[
+    {
+      "url": "https://staging.iam.unbabel.com/auth/realms/staging/protocol/openid-connect/token",
+      "method": "POST",
+      "body": {
+        "grant_type":"client_credentials"
+      },
+      "mediaType": "multipart/form-data",
+      "headers": {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization": "Basic c2EtZmlsZS1wcm9jZXNzaW5nLWFwcDp1MGRqVGRvMXNuQkJHaDFNcnl4QXk0cHlZSHhSUlVmVA=="
+      }
+    },
+  {
+    "url": "https://languageosfileapis-staging-ng.unbabel.net/v1/customers/anton/configs:discover",
+    "method": "POST",
+    "body": {
+      "work_file_format": "xlf_1_2",
+      "source_file_name": "source.txt",
+      "source_language": "en-GB",
+      "target_language": "pt-PT"
+    },
+    "mediaType": "application/json",
+    "headers": {
+      "Host": "languageosfileapis-staging-ng.unbabel.net",
+      "Authorization": "Bearer #access_token#"
+    }
+  },
+    {
+      "url": "https://languageosfileapis-staging-ng.unbabel.net/v1/customers/#customer_id#/configs/#id as config_id#/jobs/2d6c63b1-6a53-4bec-b660-5746c7d28472:postprocess",
+      "method": "POST",
+      "string_body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xliff version=\"1.2\" xmlns=\"urn:oasis:names:tc:xliff:document:1.2\" xmlns:okp=\"okapi-framework:xliff-extensions\" xmlns:its=\"http://www.w3.org/2005/11/its\" xmlns:itsxlf=\"http://www.w3.org/ns/its-xliff/\" its:version=\"2.0\">\n<file original=\"testFile.txt\" source-language=\"ro-RO\" target-language=\"en-GB\" datatype=\"x-text/plain\">\n<body>\n<trans-unit id=\"1\" xml:space=\"preserve\">\n<source xml:lang=\"ro-RO\">Istorie</source>\n<target xml:lang=\"en-GB\"></target>\n</trans-unit>\n<trans-unit id=\"2\" xml:space=\"preserve\">\n<source xml:lang=\"ro-RO\">Sfânta Elena a fost cel de-al doilea sat de cehi înființat în Banat, în anul 1824. În acea perioadă a avut loc primul val de conlonizări cu cehi proveniți din Boemia. Motivul principal pentru care cehii au fost colonizați în acest loc a fost dezvoltarea exploatărilor de lemn. Marea majoritate a cehilor au venit din regiunea „Středočeský kraj”. Ei au ridicat o biserică catolică în 1879 și una evanghelică în 1887. Între timp cea evanghelică a fost preluată de comunitatea baptistă.</source>\n<target xml:lang=\"en-GB\">translated stuff</target>\n</trans-unit>\n<trans-unit id=\"3\" xml:space=\"preserve\">\n<source xml:lang=\"ro-RO\">Istoria recentă a satului urmează o traiectorie urmată de majoritatea satelor de cehi bănățeni: după căderea regimului Ceaușescu, o bună parte dintre locuitori au emigrat, mare parte în Cehia. Dacă în 1991 aici locuiau 800 de oameni, după aproape 10 ani, numărul lor aproape s-a înjumătățit, ajungând la numai 540 de locuitori în anul 2000 și circa 400 în prezent. Sursele principale de venit ale locuitorilor care au mai rămas sunt agricultura și munca în minele de la Moldova Nouă, un sector în continuu declin. </source>\n<target xml:lang=\"en-GB\"></target>\n</trans-unit>\n</body>\n</file>\n</xliff>",
+      "mediaType": "application/octet-stream",
+      "headers": {
+        "Content-Disposition":  "attachment; filename='testFile_translated.xlf.xml'; filename*=UTF-8'''testFile_translated.xlf.xml'",
+        "Link": "<http://localhost:8080>; rel='job-processing-callback'",
+        "Content-Type": "application/octet-stream",
+        "Accept": "application/json",
+        "Host": "languageosfileapis-staging-ng.unbabel.net",
+        "Authorization": "Bearer #access_token#"
+      }
+    }
+]

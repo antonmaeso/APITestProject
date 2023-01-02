@@ -1,5 +1,6 @@
 package okwrapper;
 
+import client.Client;
 import interceptor.InterceptorModifyRequest;
 import mediatype.HttpMediaType;
 import okhttp3.*;
@@ -16,10 +17,7 @@ public record OKAPIExecutor(IRequest request) implements RequestExecutor {
 
     @Override
     public IResponse execute() {
-        OkHttpClient client = new OkHttpClient()
-                .newBuilder()
-                .addInterceptor(new InterceptorModifyRequest())
-                .build();
+        OkHttpClient client = new Client().getClient();
         RequestBody okRequestBody = addRequestBody();
         Call call = client
                 .newCall(
@@ -47,7 +45,8 @@ public record OKAPIExecutor(IRequest request) implements RequestExecutor {
             request.getBody().forEach((k, v) -> formBody.add(k, v.toString()));
             return formBody.build();
         }
-        if (mediaType.toString().equals(HttpMediaType.TEXT_PLAIN.getMediaType())) {
+        if (mediaType.toString().equals(HttpMediaType.TEXT_PLAIN.getMediaType()) ||
+                mediaType.toString().equals(HttpMediaType.APPLICATION_OCTET_STREAM.getMediaType())) {
             return RequestBody.create(mediaType, request.getStringBody());
         }
         if(HttpMediaType.isJsonBody(request.getMediaType().value())) {
